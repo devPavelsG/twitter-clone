@@ -4,12 +4,12 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }) => {
   return (
     <ClerkProvider {...pageProps} >
       <Component {...pageProps} />
     </ClerkProvider>
   );
-}
+};
 
 export default api.withTRPC(MyApp);
