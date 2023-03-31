@@ -19,7 +19,7 @@ export const CreatePostWizard = () => {
       void ctx.posts.getAll.invalidate();
     },
     onError: (err) => {
-      const errorMessages = err.data.zodError?.fieldErrors.content;
+      const errorMessages = err.data?.zodError?.fieldErrors.content;
       if (!!errorMessages && !!errorMessages[0]) {
         toast.error(errorMessages[0]);
       } else {
