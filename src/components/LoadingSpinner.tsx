@@ -1,9 +1,13 @@
 type Props = {
   size?: number;
+  width?: "AUTO" | "FULL";
+  height?: "AUTO" | "FULL";
 }
-export const LoadingSpinner = ({ size = 40 }: Props) => {
+export const LoadingSpinner = ({ size = 40, height = "FULL", width = "FULL" }: Props) => {
   return (
-    <div role="status" className={"w-full h-full flex items-center justify-center"}>
+    <div
+      role="status"
+      className={`${height === "FULL" ? "w-full" : "w-auto"} ${width === "FULL" ? "h-full" : "h-auto"} flex items-center justify-center`}>
       <svg
         aria-hidden="true"
         className="text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
