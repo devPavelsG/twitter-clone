@@ -21,7 +21,7 @@ export const PostItem = (props: PostWithUser) => {
       <div className={"flex flex-col justify-center"}>
         <div className={"flex gap-2"}>
           <Link href={`/@${author.username}`}>
-            <span className={"font-bold"}>{`@${author.username}`}</span>
+            <span className={"font-bold hover:underline"}>{`@${author.username}`}</span>
           </Link>
           <span>·</span>
           <Link href={`/post/${post.id}`}>
