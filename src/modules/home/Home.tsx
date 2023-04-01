@@ -12,7 +12,7 @@ export const Home = () => {
       <div className={"border-b border-slate-600 flex p-4"}>
         {user.isSignedIn ? <div className={"flex justify-between w-full gap-8 items-center"}>
             <CreatePostWizard/>
-            <div className={"w-32 border border-red-300 px-6 py-2 rounded-md"}>
+            <div className={"w-36 flex items-center justify-center border border-red-300 px-6 py-2 rounded-md"}>
               <SignOutButton/>
             </div>
           </div> :
