@@ -1,18 +1,23 @@
+import {api} from "~/utils/api";
 import Head from "next/head";
-
+import {PostItem} from "~/components/PostItem";
 
 type Props = {
   id: string;
 }
 export const PostView = ({id}: Props) => {
+  const {data} = api.posts.getById.useQuery({
+    id
+  });
+
+  if (!data) return (<>404</>);
+
   return (
-    <>
+    <div>
       <Head>
-        <title>Post View</title>
+        <title>{data.post.content.slice(0, 12)}{data.post.content.length > 12 ? "..." : ""} - @{data.author.username}</title>
       </Head>
-      <main className="flex min-h-screen justify-center">
-        <div>test</div>
-      </main>
-    </>
+      <PostItem {...data} />
+    </div>
   );
 };

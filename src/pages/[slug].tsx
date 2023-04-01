@@ -1,10 +1,7 @@
 import {type GetStaticProps, type NextPage} from "next";
-import superjson from "superjson";
 import {ProfileView} from "~/modules/profile/ProfileView";
-import {createProxySSGHelpers} from '@trpc/react-query/ssg';
 import {PageLayout} from "~/components/PageLayout";
-import {appRouter} from "~/server/api/root";
-import {prisma} from "~/server/db";
+import {generateSSGHelper} from "~/server/helpers/ssgHelper";
 
 const ProfilePage: NextPage<{username: string}> = ({username}) => {
   return (
@@ -15,11 +12,7 @@ const ProfilePage: NextPage<{username: string}> = ({username}) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: {prisma, userId: null},
-    transformer: superjson,
-  });
+  const ssg = generateSSGHelper();
 
   const slug = context.params?.slug;
 
