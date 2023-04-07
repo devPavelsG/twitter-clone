@@ -16,11 +16,11 @@ export const Home = () => {
               <SignOutButton/>
             </div>
           </div> :
-          <div className={"w-32 border px-6 py-2 flex justify-center items-center rounded-md"}><SignInButton/></div>}
+          <div className={"w-32 border px-6 py-2 flex justify-center items-center rounded-md"}><SignInButton /></div>}
       </div>
       {isLoading ? <LoadingSpinner size={64}/> : <div className={"flex flex-col"}>
         {posts?.map((fullPost) => (
-          <PostItem {...fullPost} key={fullPost.post.id}/>
+          <PostItem post={fullPost} key={fullPost.id}/>
         ))}
       </div>}
     </>

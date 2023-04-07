@@ -17,7 +17,7 @@ const ProfileFeed = (props: { userId: string }) => {
     <div className={"flex flex-col"}>
       {isLoading ?
         <div className={"h-96"}><LoadingSpinner/></div> :
-        !!data ? data?.map(({post, author}) => (<PostItem post={post} author={author} key={post.id}/>)) :
+        !!data ? data?.map((post) => (<PostItem post={post} key={post.id}/>)) :
           <div className={"h-96 flex justify-center items-center"}>User has not posted anything yet.</div>}
     </div>
   );

@@ -15,9 +15,9 @@ export const PostView = ({id}: Props) => {
   return (
     <div>
       <Head>
-        <title>{data.post.content.slice(0, 12)}{data.post.content.length > 12 ? "..." : ""} - @{data.author.username}</title>
+        <title>{data.content.slice(0, 12)}{data.content.length > 12 ? "..." : ""} - @{data.user.username}</title>
       </Head>
-      <PostItem {...data} />
+      <PostItem post={data} />
     </div>
   );
 };
