@@ -48,13 +48,16 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
         <Link href={`/post/${post.id}`}>
           <span className={"font-light"}>{post.content}</span>
         </Link>
-        <div className={"py-2"}>
+        <div className={"py-2 flex gap-2 items-center"}>
+          <div>{post.likedBy.length}</div>
           <div onClick={() => {
-            setIsLiked(!isLiked);
-            mutate({
-              id: post.id,
-            });
-          }} className={"cursor-pointer"}>
+            if (!!session?.user) {
+              setIsLiked(!isLiked);
+              mutate({
+                id: post.id,
+              });
+            }
+          }} className={`${!!session?.user ? "cursor-pointer" : "cursor-not-allowed"}`}>
             {isLiked ? <AiFillHeart/> : <AiOutlineHeart/>}
           </div>
         </div>
