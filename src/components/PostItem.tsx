@@ -2,11 +2,26 @@ import type {Post, User} from "@prisma/client";
 import Image from "next/image";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
+import {api} from "~/utils/api";
 import dayjs from "dayjs";
+import {AiOutlineHeart, AiFillHeart} from "react-icons/ai";
+import {isLikedByUser} from "~/utils/isLikedByUser";
+import {useSession} from "@clerk/nextjs";
+import {useEffect, useState} from "react";
 
 dayjs.extend(relativeTime);
-export const PostItem = (props: {post:  Post & {user: User}}) => {
+export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }) => {
   const {post} = props;
+  const {session} = useSession();
+
+  const [isLiked, setIsLiked] = useState(isLikedByUser(post, session?.user.id));
+
+  useEffect(() => {
+    setIsLiked(isLikedByUser(post, session?.user.id));
+  }, [post, session?.user.id]);
+
+  const {mutate} = api.posts.like.useMutation();
+
   return (
     <div className={"p-4 border-slate-600 border-b flex items-center gap-4 grow"}>
       <Link href={`/@${post.user.username}`}>
@@ -33,6 +48,16 @@ export const PostItem = (props: {post:  Post & {user: User}}) => {
         <Link href={`/post/${post.id}`}>
           <span className={"font-light"}>{post.content}</span>
         </Link>
+        <div className={"py-2"}>
+          <div onClick={() => {
+            setIsLiked(!isLiked);
+            mutate({
+              id: post.id,
+            });
+          }} className={"cursor-pointer"}>
+            {isLiked ? <AiFillHeart/> : <AiOutlineHeart/>}
+          </div>
+        </div>
       </div>
     </div>
   );

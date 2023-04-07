@@ -23,6 +23,7 @@ export const postsRouter = createTRPCRouter({
         where: {id: input.id},
         include: {
           user: true,
+          likedBy: true,
         }
       })
 
@@ -36,7 +37,7 @@ export const postsRouter = createTRPCRouter({
 
   getAll: publicProcedure.query(async ({ctx}) => await ctx.prisma.post.findMany({
       take: 100,
-      include: {user: true},
+      include: {user: true, likedBy: true},
       orderBy: [{createdAt: "desc"}]
     })
   ),
@@ -45,7 +46,7 @@ export const postsRouter = createTRPCRouter({
     userId: z.string()
   })).query(({ctx, input}) => ctx.prisma.post.findMany({
     where: {userId: input.userId},
-    include: {user: true},
+    include: {user: true, likedBy: true},
     take: 100,
     orderBy: [{createdAt: "desc"}],
   })),
@@ -74,4 +75,51 @@ export const postsRouter = createTRPCRouter({
         },
       });
     }),
+
+  like: privateProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
+    const userId = ctx.userId;
+    const postId = input.id;
+
+    const post = await ctx.prisma.post.findUnique({
+      where: {id: postId},
+      include: {likedBy: true},
+    });
+
+    if (!post) throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Post not found"
+    });
+
+    const like = post.likedBy.find(like => like.id === userId);
+
+    if (!!like) {
+      await ctx.prisma.post.update({
+        where: {id: postId},
+        data: {
+          likedBy: {disconnect: {id: userId}},
+        },
+      });
+      await ctx.prisma.user.update({
+        where: {id: userId},
+        data: {
+          likedPosts: {disconnect: {id: postId}},
+        },
+      });
+    } else {
+      await ctx.prisma.post.update({
+        where: {id: postId},
+        data: {
+          likedBy: {connect: {id: userId}},
+        },
+      });
+      await ctx.prisma.user.update({
+        where: {id: userId},
+        data: {
+          likedPosts: {connect: {id: postId}},
+        },
+      });
+    }
+
+    return true;
+  }),
 });
