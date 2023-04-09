@@ -5,7 +5,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import { Toaster } from "react-hot-toast";
 
-import "~/styles/globals.css";
+import "~/styles/globals.scss";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (

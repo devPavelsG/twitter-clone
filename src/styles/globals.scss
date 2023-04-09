@@ -8,3 +8,9 @@ body {
     @apply bg-black text-white;
     font-family: 'Poppins', sans-serif;
 }
+
+.linkHover {
+    a:hover {
+        text-decoration: underline;
+    }
+}

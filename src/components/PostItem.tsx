@@ -8,8 +8,10 @@ import {AiOutlineHeart, AiFillHeart} from "react-icons/ai";
 import {isLikedByUser} from "~/utils/isLikedByUser";
 import {useSession} from "@clerk/nextjs";
 import {useEffect, useState} from "react";
+import Linkify from "linkify-react";
 
 dayjs.extend(relativeTime);
+
 export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }) => {
   const {post} = props;
   const {session} = useSession();
@@ -47,9 +49,11 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
             </span>
           </Link>
         </div>
-        <Link href={`/post/${post.id}`}>
-          <span className={"font-light"}>{post.content}</span>
-        </Link>
+          <span className={"font-light linkHover"}>
+            <Linkify>
+              {post.content}
+            </Linkify>
+          </span>
         <div className={"py-2 flex gap-2 items-center"}>
           <div>{likedCounter}</div>
           <div onClick={() => {
