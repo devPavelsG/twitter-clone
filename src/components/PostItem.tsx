@@ -15,9 +15,11 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
   const {session} = useSession();
 
   const [isLiked, setIsLiked] = useState(isLikedByUser(post, session?.user.id));
+  const [likedCounter, setLikedCounter] = useState(post.likedBy.length);
 
   useEffect(() => {
     setIsLiked(isLikedByUser(post, session?.user.id));
+    setLikedCounter(post.likedBy.length);
   }, [post, session?.user.id]);
 
   const {mutate} = api.posts.like.useMutation();
@@ -49,10 +51,11 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
           <span className={"font-light"}>{post.content}</span>
         </Link>
         <div className={"py-2 flex gap-2 items-center"}>
-          <div>{post.likedBy.length}</div>
+          <div>{likedCounter}</div>
           <div onClick={() => {
             if (!!session?.user) {
               setIsLiked(!isLiked);
+              setLikedCounter(isLiked ? likedCounter - 1 : likedCounter + 1)
               mutate({
                 id: post.id,
               });
