@@ -7,8 +7,13 @@ import dayjs from "dayjs";
 import {AiOutlineHeart, AiFillHeart} from "react-icons/ai";
 import {isLikedByUser} from "~/utils/isLikedByUser";
 import {useSession} from "@clerk/nextjs";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Linkify from "linkify-react";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment
+const Filter = require('bad-words'),
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+filter = new Filter();
 
 dayjs.extend(relativeTime);
 
@@ -18,6 +23,15 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
 
   const [isLiked, setIsLiked] = useState(isLikedByUser(post, session?.user.id));
   const [likedCounter, setLikedCounter] = useState(post.likedBy.length);
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const filteredContent = useMemo(() => {
+    if (!!filter && !!post.content) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      return (filter.clean(post.content)) as string;
+    }
+    return "";
+  }, [post.content]);
 
   useEffect(() => {
     setIsLiked(isLikedByUser(post, session?.user.id));
@@ -49,9 +63,9 @@ export const PostItem = (props: { post: Post & { user: User, likedBy: User[] } }
             </span>
           </Link>
         </div>
-          <span className={"font-light linkHover"}>
+        <span className={"font-light linkHover"}>
             <Linkify>
-              {post.content}
+              {filteredContent}
             </Linkify>
           </span>
         <div className={"py-2 flex gap-2 items-center"}>
