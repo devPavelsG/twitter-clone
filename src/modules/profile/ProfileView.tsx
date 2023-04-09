@@ -7,6 +7,7 @@ import {PostItem} from "~/components/PostItem";
 import {useSession} from "@clerk/nextjs";
 import {isFollowingUser} from "~/utils/isFollowingUser";
 import {useEffect, useState} from "react";
+import Link from "next/link";
 
 type Props = {
   username: string;
@@ -65,7 +66,10 @@ export const ProfileView = ({username}: Props) => {
       <Head>
         <title>@{user.username}</title>
       </Head>
-      <div className={"border-b h-32 border-slate-600 flex p-4 items-center gap-4 relative bg-slate-800"}>
+      <div className={"border-b h-32 border-slate-600 flex p-2 gap-4 relative bg-slate-800"}>
+        <Link href={"/"}>
+          <button className={"border px-4 text-xs py-2 rounded-md"}>Home</button>
+        </Link>
         <Image
           className={"rounded-full absolute bottom-0 left-4 -mb-[5rem] border-4 border-black"}
           src={user.profileImageUrl ?? ""}
@@ -79,16 +83,18 @@ export const ProfileView = ({username}: Props) => {
           <div className={"text-2xl font-bold"}>{user.firstName} {user.lastName}</div>
           {
             session?.user.id !== user.id &&
-              <button className={`${!!session?.user ? "cursor-pointer" : "cursor-not-allowed"} border px-6 py-2 rounded-md`} onClick={
-                () => {
-                  if (!!session?.user) {
-                    setIsFollowing(!isFollowing);
-                    setFollowersCount(isFollowing ? followersCount - 1 : followersCount + 1);
-                    followUser({
-                      id: user.id
-                    });
-                  }
-                }}>
+              <button
+                  className={`${!!session?.user ? "cursor-pointer" : "cursor-not-allowed"} border px-6 py-2 rounded-md`}
+                  onClick={
+                    () => {
+                      if (!!session?.user) {
+                        setIsFollowing(!isFollowing);
+                        setFollowersCount(isFollowing ? followersCount - 1 : followersCount + 1);
+                        followUser({
+                          id: user.id
+                        });
+                      }
+                    }}>
                 {isFollowing ? "Unfollow" : "Follow"}
               </button>
           }
