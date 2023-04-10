@@ -18,6 +18,9 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { prisma } from "~/server/db";
 
+import {Server} from "socket.io";
+import { createServer } from "http";
+
 /**
  * This is the actual context you will use in your router. It will be used to process every request
  * that goes through your tRPC endpoint.
@@ -27,10 +30,44 @@ import { prisma } from "~/server/db";
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const { userId } = getAuth(req);
+
+  // create the socket.io server
+  const httpServer = createServer((req, res) => {
+    res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
+    res.end("Hello world!");
+  });
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+  });
+
+  // Handle new connections to the Socket.IO server
+  io.on("connection", (socket) => {
+    console.log("New client connected: ", socket.id);
+
+    // Handle disconnections from the Socket.IO server
+    socket.on("disconnect", () => {
+      console.log("Client disconnected: ", socket.id);
+    });
+
+    socket.on("message", (data) => {
+      io.emit("message", data);
+    });
+  });
+
+  httpServer.listen(3001, () => {
+    console.log("Socket.IO server running on http://localhost:3000");
+  })
+
   return {
     req,
     prisma,
-    userId
+    userId,
+    io
   };
 };
 

@@ -14,3 +14,11 @@ body {
         text-decoration: underline;
     }
 }
+
+.scrollbar-hide {
+    scrollbar-width: none; /* Hide scrollbar on Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar on IE 10+ */
+    &::-webkit-scrollbar {
+        width: 0; /* Hide scrollbar on Chrome, Safari, and Opera */
+    }
+}

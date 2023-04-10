@@ -17,10 +17,12 @@ model User {
   firstName       String?
   lastName        String?
   profileImageUrl String?
-  posts           Post[] // Creates an implicit one-to-many relation between Author and Post
+  posts           Post[] // Creates an implicit one-to-many relation between User and Post
   followedBy      User[]   @relation("UserFollows") // Creates a self-many-to-many relation
   following       User[]   @relation("UserFollows") // Creates a self-many-to-many relation
-  likedPosts      Post[]   @relation("UserLikes") // Creates a implicit many-to-many relation between User and Postc
+  likedPosts      Post[]   @relation("UserLikes") // Creates an implicit many-to-many relation between User and Post
+  receivedChats   Chat[]   @relation("ChatReceiver") // Creates a one-to-many relation between User and Chat as a receiver
+  sentChats       Chat[]   @relation("ChatSender") // Creates a one-to-many relation between User and Chat as a sender
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -29,9 +31,21 @@ model Post {
   id        String   @id @default(uuid())
   content   String   @db.VarChar(255)
   userId    String
-  user      User     @relation(fields: [userId], references: [id]) // Creates a many-to-one relation between Post and Author
+  user      User     @relation(fields: [userId], references: [id]) // Creates a many-to-one relation between Post and User
   likedBy   User[]   @relation("UserLikes") // Creates a implicit many-to-many relation between User and Post
   createdAt DateTime @default(now())
 
   @@index([userId])
+}
+
+model Chat {
+  id         String   @id @default(uuid())
+  message    String
+  sender     User     @relation("ChatSender", fields: [senderId], references: [id]) // Creates a many-to-one relation between Chat and User as sender
+  senderId   String
+  receiver   User     @relation("ChatReceiver", fields: [receiverId], references: [id]) // Creates a many-to-one relation between Chat and User as receiver
+  receiverId String
+  createdAt  DateTime @default(now())
+
+  @@index([senderId, receiverId])
 }
