@@ -31,7 +31,7 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const { userId } = getAuth(req);
 
-  // create the socket.io server
+  // Create the socket.io server
   const httpServer = createServer((req, res) => {
     res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
     res.end("Hello world!");
