@@ -60,7 +60,7 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
   });
 
   httpServer.listen(3001, () => {
-    console.log("Socket.IO server running on http://localhost:3000");
+    console.log("Socket.IO server running on http://localhost:3001");
   })
 
   return {
