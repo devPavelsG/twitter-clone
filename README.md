@@ -2,6 +2,9 @@
 
 <p align="center">Welcome to my Twitter clone app! This app was built using Next.js, Typescript, Prisma, Clerk for authentication (which also syncs with the database), tRPC, Socket.io for global chat, Upstash for rate limiting, TailwindCSS, and other powerful technologies.</p>
 
+<h3 align="center">You can find a live demo of the app <a href="https://twitter.pavelsgarklavs.dev/">here</a>.</h3>
+<p align="center">Please note that due to the hosting platform (Vercel) limitations, the app's WebSocket functionality won't work in the live production environment. </p>
+
 <p align="center">
   <img src="https://img.shields.io/github/license/devPavelsG/twitter-clone?style=for-the-badge" alt="License"/>
   <img src="https://img.shields.io/github/issues/devPavelsG/twitter-clone?style=for-the-badge" alt="Issues"/>
