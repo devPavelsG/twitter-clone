@@ -20,6 +20,7 @@
 - Following users
 - Rate limiting
 - Global chat with Socket.io
+- Profanity filter
 
 ## Technologies Used
 
